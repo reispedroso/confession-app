@@ -11,10 +11,15 @@ export type Question = {
     options: string[];
 };
 
+
 export interface CommandmentResponses {
+
     [commandmentNumber: number]: {
-        [questionId: number]: number[]; 
+
+        [questionId: number]: string[] | number[];
+
     };
+
 }
 
 export type QuestionResponses = { [questionId: number]: number[] };

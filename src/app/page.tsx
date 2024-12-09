@@ -21,7 +21,7 @@ export default function Home() {
           <p>Reforçamos que nenhum dado do usuário é armazenado, garantindo total anonimato e segurança.</p>
         </div>
         <div id="button" className="w-2/3 flex flex-col items-center justify-center text-center">
-          <Link href="/commandments/1" className="bg-roman-light-red hover:bg-roman-dark-red ease-in duration-150 text-white hover:text-roman-gray text-md font-medium h-20 w-full rounded-2xl flex flex-col items-center justify-center">
+          <Link href="/initial-questions" className="bg-roman-light-red hover:bg-roman-dark-red ease-in duration-150 text-white hover:text-roman-gray text-md font-medium h-20 w-full rounded-2xl flex flex-col items-center justify-center">
           Fazer exame de consicência
           </Link>
         </div>

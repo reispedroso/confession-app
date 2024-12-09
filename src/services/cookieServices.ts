@@ -1,5 +1,5 @@
 import { parseCookies, setCookie } from "nookies";
-import { CommandmentResponses } from "@/data/types/commandments";
+import { CommandmentResponses } from "@/data/types/commandments-types";
 
 const COOKIE_NAME = "commandmentResponses";
 

@@ -1,5 +1,37 @@
-import { Commandment } from "./types/commandments";
+import { Commandment } from "./types/commandments-types";
 
+export const initialQuestions: Commandment = {
+    commandment: 'Perguntas Iniciais',
+    commandmentNumber: 0.1,
+    questions: [
+        {
+            id: 1,
+            title: "A quanto tempo se converteu ao catolicismo ",
+            exclusiveOption: 0,
+            options: [
+                "Nasci na Igreja Católica",
+                "Na a infância",
+                "Na a adolescência",
+                "Na a vida adulta",
+                "Na a velhice"
+            ],
+        },
+        {
+            id: 2,
+            title: "Sobre a última confissão",
+            exclusiveOption: 0,
+            options: [
+                "Nunca confessei",
+                "Confessei sem falhas",
+                "Menti na confissão",
+                "Omiti pecados",
+                "Confessei sem arrependimento",
+                "Não cumpri a penitência",
+                "Não reparei meus erros"
+            ]    
+        }
+    ]
+}
 
 export const firstCommandmentPtBr: Commandment = {
     commandment: 'Amar a Deus sobre todas as coisas',

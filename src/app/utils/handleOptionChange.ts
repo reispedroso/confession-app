@@ -11,7 +11,7 @@ export const handleOptionChange = (
     commandmentNumber: number
 ) => {
     const currentSelectedOptions = responses[questionId] || [];
-    const optionText = questions.find((q) => q.id === questionId)?.options[optionIndex]; // Retrieve option text
+    const optionText = questions.find((q) => q.id === questionId)?.options[optionIndex]; 
 
     if (!optionText) return;
 

@@ -31,9 +31,8 @@ const InitialQuestionsScreen = () => {
 
     return (
         <div>
-
-            <div id="title" className="bg-background-light-black p-4 flex items-center justify-center mb-10">
-            <button
+            <div id="title" className="bg-background-light-black p-4 flex items-center justify-center mb-4">
+                <button
                     onClick={() => window.history.back()}
                     className="bg-roman-light-red hover:bg-roman-dark-red ease-in duration-150 text-white hover:text-roman-gray text-md font-medium h-10 w-10 rounded-2xl flex items-center justify-center mr-5"
                 >
@@ -43,6 +42,21 @@ const InitialQuestionsScreen = () => {
                     className="text-2xl font-semibold text-center text-white">
                     {initialQuestions.commandment}
                 </h1>
+            </div>
+            <div id="warning-center" className='w-full flex items-center justify-center'>
+                <div id="warning" className='w-11/12 justify-center items-center bg-gray-200 rounded-lg'>
+                    <div id="warning-title" className='bg-roman-yellow rounded-t-lg text-center'>
+                        <h1 className='text-background-light-black font-semibold'>ATENÇÃO</h1>
+                    </div>
+                    <p className='p-2'>
+                        Para uma boa confissão é preciso de um bom exame
+                        de consciência. Procure fazer isso em um local calmo,
+                        onde você possa relaxar. Reze por sabedoria e responda
+                        essas perguntas de coração.
+                        Nenhum dado seu é retido, sendo as opções apenas usadas para montar
+                        posteriormente a sua confissão da melhor forma. É totalmente anônimo.
+                    </p>
+                </div>
             </div>
             {initialQuestions.questions.map((question) => (
                 <div key={question.id} className='mb-4'>

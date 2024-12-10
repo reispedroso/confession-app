@@ -1,14 +1,14 @@
 'use client'
-import { initialQuestions } from '@/data/commandments';
+import { initialQuestionsPtBr } from '@/data/commandments-pt';
 import { getCommandmentResponses } from '@/services/cookieServices';
 import { useState, useEffect } from 'react';
-import { handleOptionChange } from '../utils/handleOptionChange';
+import { handleOptionChange, handleSingleSelectionChange } from '../utils/handleOptionChange';
 import Link from 'next/link';
 import Image from 'next/image';
 
 const InitialQuestionsScreen = () => {
     const [responses, setResponses] = useState<{ [questionId: number]: string[] }>({});
-    const commandmentNumber = initialQuestions.commandmentNumber;
+    const commandmentNumber = initialQuestionsPtBr.commandmentNumber;
 
     useEffect(() => {
         const savedResponses = Object.fromEntries(Object.entries(getCommandmentResponses()[commandmentNumber] || {})
@@ -18,17 +18,21 @@ const InitialQuestionsScreen = () => {
     }, [commandmentNumber]);
 
     const handleChange = (questionId: number, optionIndex: number, isExclusive: boolean) => {
-        handleOptionChange(
-            questionId,
-            optionIndex,
-            isExclusive,
-            responses,
-            setResponses,
-            initialQuestions.questions,
-            commandmentNumber
-        );
-    }
-
+        if (questionId === 1) {
+            handleSingleSelectionChange(questionId, optionIndex, responses, setResponses, initialQuestionsPtBr.questions, commandmentNumber);
+        } else {
+            handleOptionChange(
+                questionId,
+                optionIndex,
+                isExclusive,
+                responses,
+                setResponses,
+                initialQuestionsPtBr.questions,
+                commandmentNumber
+            );
+        }
+    };
+    
     return (
         <div>
             <div id="title" className="bg-background-light-black p-4 flex items-center justify-center mb-4">
@@ -40,7 +44,7 @@ const InitialQuestionsScreen = () => {
                 </button>
                 <h1
                     className="text-2xl font-semibold text-center text-white">
-                    {initialQuestions.commandment}
+                    {initialQuestionsPtBr.commandment}
                 </h1>
             </div>
             <div id="warning-center" className='w-full flex items-center justify-center'>
@@ -58,7 +62,7 @@ const InitialQuestionsScreen = () => {
                     </p>
                 </div>
             </div>
-            {initialQuestions.questions.map((question) => (
+            {initialQuestionsPtBr.questions.map((question) => (
                 <div key={question.id} className='mb-4'>
                     <div id="question" className="flex items-center m-2">
                         <div id="number" className="bg-roman-light-red w-10 h-10 rounded-lg flex items-center justify-center text-white mr-2">
@@ -66,25 +70,22 @@ const InitialQuestionsScreen = () => {
                         </div>
                         <h2 className="text-2xl font-semibold">{question.title}</h2>
                     </div>
-                    {question.options.map((option, index) => (
-                        <div key={index} className="flex items-center m-2 pl-3 text-md">
+                    {question.options.map((option, optionIndex) => (
+                        <div key={optionIndex} className="flex items-center m-2 pl-3 text-md">
                             <input
                                 type="checkbox"
                                 className=" peer h-5 w-5 cursor-pointer transition-all appearance-none rounded shadow hover:shadow-md border border-slate-300 checked:bg-slate-800 checked:border-slate-800"
-                                id={`q${question.id}-o${index}`}
+                                id={`q${question.id}-o${optionIndex}`}
                                 checked={responses[question.id]?.includes(option) || false}
-                                onChange={() =>
-                                    handleChange(question.id, index, question.exclusiveOption === index)
-                                }
-                                disabled={
-                                    question.exclusiveOption !== -1 &&
-                                    responses[question.id]?.includes(
-                                        question.options[question.exclusiveOption]
-                                    ) &&
-                                    !responses[question.id]?.includes(option)
+                                onChange={() => 
+                                    handleChange(
+                                        question.id, 
+                                        optionIndex, 
+                                        question.exclusiveOption == optionIndex // Verifica se a opção é exclusiva
+                                    )
                                 }
                             />
-                            <label htmlFor={`q${question.id}-o${index}`} className="ml-2">
+                            <label htmlFor={`q${question.id}-o${optionIndex}`} className="ml-2">
                                 {option}
                             </label>
                         </div>

@@ -1,6 +1,6 @@
 'use client'
 import { useEffect, useState } from "react";
-import { firstCommandmentPtBr } from "@/data/commandments";
+import { firstCommandmentPtBr } from "@/data/commandments-pt";
 import { updateCommandmentResponses, getCommandmentResponses } from "@/services/cookieServices";
 import { handleOptionChange } from "@/app/utils/handleOptionChange";
 import Link from "next/link";

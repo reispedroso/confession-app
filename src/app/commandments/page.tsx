@@ -6,6 +6,7 @@ import { fetchAndUpdateCommandments } from '../services/commandmentsService';
 import { applyTheme } from '../utils/themeManager';
 import PdfButton from '../components/pdfButton';
 import Link from 'next/link';
+import Navbar from '../components/navBar';
 
 const CommandmentsList = () => {
     const [commandments, setCommandments] = useState<Commandment[]>([]);
@@ -57,6 +58,7 @@ const CommandmentsList = () => {
 
     return (
         <main className='w-full'>
+            <Navbar />
             <div id="container" className='p-10 flex flex-col items-center max-w-screen-md mx-auto'>
                 <div id="page-title">
                     <Link href="/" className='font-katibeh text-3xl font-bold text-brand-500'>EXAME DE CONSCIÊNCIA</Link>

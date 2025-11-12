@@ -1,22 +1,27 @@
 import type { Metadata } from "next";
+import { Inter } from "next/font/google";
 import "./globals.css";
 
-
+const inter = Inter({
+  variable: "--font-inter",
+  subsets: ["latin"],
+});
 
 export const metadata: Metadata = {
   title: "Confession App",
-  description: "An app for catholic confession",
+  description: "Want some help in confession?",
 };
 
-type Props = {
+export default function RootLayout({
+  children,
+}: Readonly<{
   children: React.ReactNode;
-}
-
-export default function RootLayout({ children }: Props) {
+}>) {
   return (
-    <html lang="en">
-      <body>
-      
+    <html lang="en" className="dark">
+      <body
+        className={`${inter.variable} min-h-screen bg-zinc-900 text-zinc-100`}
+      >
         {children}
       </body>
     </html>

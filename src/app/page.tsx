@@ -9,13 +9,13 @@ export default function Home() {
         <div className="flex justify-center">
           <Image src={Guadalupe} alt="Guadalupe Mary" width={200} priority />
         </div>
-        <div className="space-y-4 text-zinc-400">
-          <p className="text-lg text-zinc-300">
+        <div className="space-y-4 text-zinc-700 text-xl font-medium">
+          <p className="text-lg text-zinc-800">
             Este assistente foi desenvolvido para ajudar na preparação para uma
             boa confissão católica, baseado nos mandamentos da Lei de Deus e da
             Igreja.
           </p>
-          <p className="pt-2 font-medium text-zinc-100">Nota Importante:</p>
+          <p className="pt-2 font-medium text-red-700">Nota Importante:</p>
           <p>
             As frases e opções apresentadas neste formulário foram revisadas e
             correspondem a ações que, de acordo com o Catecismo da Igreja
@@ -27,7 +27,7 @@ export default function Home() {
             princípios morais estabelecidos. A finalidade é auxiliar a memória,
             não substituir a formação da consciência ou o diálogo com o confessor.
           </p>
-          <p className="border-t border-zinc-700 pt-4 font-semibold text-zinc-100">
+          <p className="border-t border-zinc-700 pt-4 font-medium text-red-800">
             Reflita com seriedade. Não adianta fazer birra ou buscar
             justificativas: se você o fez, é pecado e precisa ser confessado.
           </p>

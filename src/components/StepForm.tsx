@@ -30,6 +30,7 @@ export function StepForm({
     setSelections(savedAnswers);
   }, [stepData.id, getStepAnswers]);
 
+
   const handleSelect = (
     question: ConfessionQuestion,
     option: ConfessionOption
@@ -138,98 +139,112 @@ export function StepForm({
     }
   };
 
+
   return (
-    <div className="w-full max-w-2xl space-y-12">
-      <div className="text-center">
-        <h1 className="text-3xl font-bold tracking-tight text-zinc-100">
+    <div className="w-full max-w-2xl bg-white rounded-2xl shadow-lg overflow-hidden">
+      
+      <div className="bg-red-800 text-white p-4 text-center">
+        <h1 className="text-lg opacity-80 font-bold tracking-tight">
           {stepData.title}
         </h1>
         {stepData.subtitle && (
-          <h2 className="mt-2 text-xl text-zinc-400">
+          <h2 className="mt-1 text-xl font-semibold">
             {stepData.subtitle}
           </h2>
         )}
       </div>
 
-      <div className="space-y-10">
-        {stepData.questions.map((question) => (
-          <div
-            key={question.id}
-            className="space-y-5 border-b border-zinc-700 pb-10"
-          >
-            <h3 className="text-lg font-semibold text-zinc-100">
-              {question.prompt}
-            </h3>
-            <div className="space-y-4">
-              {question.options.map((option) => (
-                <div key={option.label}>
-                  <div className="flex items-start space-x-3">
-                    <Checkbox
-                      id={`q${question.id}-${option.label}`}
-                      checked={isSelected(question.id, option.label)}
-                      onCheckedChange={() => handleSelect(question, option)}
-                    />
-                    <label
-                      htmlFor={`q${question.id}-${option.label}`}
-                      className="cursor-pointer text-base font-light leading-snug text-zinc-300 transition-colors hover:text-zinc-100"
-                    >
-                      {option.label}
-                    </label>
-                  </div>
-
-                  {isSelected(question.id, option.label) &&
-                    option.dialogType && (
-                      <div className="ml-7 mt-3 space-y-2 pb-1">
-                        <Label
-                          htmlFor={`input-${question.id}-${option.label}`}
-                          className="text-sm font-medium text-red-400"
-                        >
-                          {option.dialogType === "count"
-                            ? "Quantas vezes?"
-                            : "Especifique (opcional):"}
-                        </Label>
-                        <Input
-                          id={`input-${question.id}-${option.label}`}
-                          type={
-                            option.dialogType === "count" ? "number" : "text"
-                          }
-                          min={option.dialogType === "count" ? 1 : undefined}
-                          value={getSelectionValue(question.id, option.label)}
-                          onChange={(e) =>
-                            handleValueChange(
-                              question.id,
-                              option.label,
-                              e.target.value
-                            )
-                          }
-                          className="h-10 border-zinc-600 bg-zinc-800 text-zinc-100"
-                          placeholder={
-                            option.dialogType === "count" ? "Ex: 3" : "..."
-                          }
-                        />
-                      </div>
-                    )}
+      <div className="p-6 md:p-8 space-y-10">
+        
+        <div className="space-y-10">
+          {stepData.questions.map((question) => (
+            <div
+              key={question.id}
+ 
+              className="space-y-5 border-b border-zinc-200 pb-8 last:border-b-0 last:pb-0"
+            >
+              
+     
+              <div className="flex items-center space-x-3">
+                <div className="bg-red-800 text-white font-semibold size-8 flex items-center justify-center rounded-md shrink-0">
+                  {question.id}
                 </div>
-              ))}
-            </div>
-          </div>
-        ))}
-      </div>
+                <h3 className="text-lg font-semibold text-red-900">
+                  {question.prompt}
+                </h3>
+              </div>
 
-      <div className="flex justify-between pt-4">
-        <button
-          onClick={() => handleNavigate("prev")}
-          disabled={prevStepId === null}
-          className="inline-flex h-11 items-center justify-center rounded-md bg-zinc-700 px-6 text-base font-medium text-zinc-100 transition-colors hover:bg-zinc-600 disabled:opacity-50"
-        >
-          Anterior
-        </button>
-        <button
-          onClick={() => handleNavigate("next")}
-          className="inline-flex h-11 items-center justify-center rounded-md bg-red-800 px-6 text-base font-medium text-white shadow-lg transition-colors hover:bg-red-700 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-red-500 focus-visible:ring-offset-2 focus-visible:ring-offset-zinc-900"
-        >
-          {nextStepId !== null ? "Próximo" : "Finalizar"}
-        </button>
+              <div className="space-y-4 pl-11">
+                {question.options.map((option) => (
+                  <div key={option.label}>
+                    <div className="flex items-center space-x-3">
+                      <Checkbox
+                        id={`q${question.id}-${option.label}`}
+                        checked={isSelected(question.id, option.label)}
+                        onCheckedChange={() => handleSelect(question, option)}
+                      />
+                      <label
+                        htmlFor={`q${question.id}-${option.label}`}
+                        className="cursor-pointer text-lg font-medium leading-snug text-zinc-700 transition-colors hover:text-zinc-900"
+                      >
+                        {option.label}
+                      </label>
+                    </div>
+
+                    {isSelected(question.id, option.label) &&
+                      option.dialogType && (
+                        <div className="ml-8 mt-3 space-y-2 pb-1"> 
+                          <Label
+                            htmlFor={`input-${question.id}-${option.label}`}
+                            className="text-sm font-medium text-red-700" 
+                          >
+                            {option.dialogType === "count"
+                              ? "Quantas vezes?"
+                              : "Especifique (opcional):"}
+                          </Label>
+                          <Input
+                            id={`input-${question.id}-${option.label}`}
+                            type={
+                              option.dialogType === "count" ? "number" : "text"
+                            }
+                            min={option.dialogType === "count" ? 1 : undefined}
+                            value={getSelectionValue(question.id, option.label)}
+                            onChange={(e) =>
+                              handleValueChange(
+                                question.id,
+                                option.label,
+                                e.target.value
+                              )
+                            }
+                            className="h-10 border-zinc-300 bg-white text-zinc-800" 
+                            placeholder={
+                              option.dialogType === "count" ? "Ex: 3" : "..."
+                            }
+                          />
+                        </div>
+                      )}
+                  </div>
+                ))}
+              </div>
+            </div>
+          ))}
+        </div>
+
+        <div className="flex justify-between pt-4">
+          <button
+            onClick={() => handleNavigate("prev")}
+            disabled={prevStepId === null}
+            className="inline-flex h-11 items-center justify-center rounded-md bg-yellow-600 px-6 text-base font-semibold cursor-pointer text-zinc-100 transition-colors hover:bg-yellow-800  disabled:opacity-50"
+          >
+            Anterior
+          </button>
+          <button
+            onClick={() => handleNavigate("next")}
+            className="inline-flex h-11 items-center justify-center rounded-md bg-red-800 px-6 text-base font-semibold text-white shadow-lg transition-colors hover:bg-red-700 focus-visible:outline-none focus-visible:ring-2 cursor-pointer focus-visible:ring-red-500 focus-visible:ring-offset-2"
+          >
+            {nextStepId !== null ? "Próximo" : "Finalizar"}
+          </button>
+        </div>
       </div>
     </div>
   );

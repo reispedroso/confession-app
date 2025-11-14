@@ -1,6 +1,5 @@
-// Importamos o StepForm como antes
 import { StepForm } from "@/components/StepForm";
-// REMOVEMOS a importação antiga do 'data.ts'
+
 
 interface PageProps {
   params: Promise<{
@@ -10,13 +9,9 @@ interface PageProps {
 
 export const revalidate = 0;
 
-// --- NOSSAS NOVAS FUNÇÕES DE BUSCA ---
-// Esta variável vem da Vercel (Passo 1)
 const API_URL = process.env.NEXT_PUBLIC_API_URL;
 
-// Função para buscar o Questionário (equiv. a getQuestionnaireStep)
 async function getQuestionnaireStep(id: number) {
-  // Chamada à sua API C# no Render
   const res = await fetch(`${API_URL}/api/step/${id}`, { cache: 'no-store' });
   if (!res.ok) {
     throw new Error(`Falha ao buscar o step: ${id}`);
@@ -24,16 +19,14 @@ async function getQuestionnaireStep(id: number) {
   return res.json();
 }
 
-// Função para buscar a ordem (equiv. a getStepsOrder)
 async function getStepsOrder(): Promise<number[]> {
-  // Chamada à sua API C# no Render
   const res = await fetch(`${API_URL}/api/steps/order`, { cache: 'no-store' });
   if (!res.ok) {
     throw new Error("Falha ao buscar a ordem dos steps");
   }
   return res.json();
 }
-// ------------------------------------
+
 
 export default async function ConfessionStepPage({ params }: PageProps) {
   
@@ -44,8 +37,6 @@ export default async function ConfessionStepPage({ params }: PageProps) {
     return null;
   }
 
-  // O resto do seu código funciona PERFEITAMENTE
-  // porque os nomes das funções são os mesmos!
   const stepData = await getQuestionnaireStep(stepId);
   const stepsOrder = await getStepsOrder();
 

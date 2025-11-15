@@ -30,23 +30,19 @@ export function StepForm({
     setSelections(savedAnswers);
   }, [stepData.id, getStepAnswers]);
 
-  // --- INÍCIO DA LÓGICA CORRIGIDA ---
   const handleSelect = (
     question: ConfessionQuestion,
     option: ConfessionOption
   ) => {
     setSelections((prev) => {
-      // 1. Separa as respostas de OUTRAS perguntas
       const otherQuestionAnswers = prev.filter(
         (s) => s.questionId !== question.id
       );
 
-      // 2. Pega apenas as respostas DESTA pergunta
       let thisQuestionAnswers = prev.filter(
         (s) => s.questionId === question.id
       );
 
-      // 3. Cria o novo item de seleção
       const newSelection: SelectedAnswer = {
         questionId: question.id,
         label: option.label,
@@ -56,48 +52,38 @@ export function StepForm({
         value: null,
       };
 
-      // CASO 1: O utilizador clicou numa opção EXCLUSIVA
       if (option.isExclusive) {
         const isAlreadySelected = thisQuestionAnswers.some(
           (s) => s.label === option.label
         );
 
         if (isAlreadySelected) {
-          // Se já estava selecionada, desmarca (fica vazio)
           thisQuestionAnswers = [];
         } else {
-          // Se não estava selecionada, desmarca tudo e seleciona esta
           thisQuestionAnswers = [newSelection];
         }
       }
-      // CASO 2: O utilizador clicou numa opção NORMAL (não exclusiva)
       else {
-        // 1. Remove qualquer opção exclusiva que possa estar marcada
         thisQuestionAnswers = thisQuestionAnswers.filter(
           (s) => !s.isExclusive
         );
 
-        // 2. Verifica se esta opção normal já estava marcada
         const isAlreadySelected = thisQuestionAnswers.some(
           (s) => s.label === option.label
         );
 
         if (isAlreadySelected) {
-          // Se sim, remove-a (desmarca)
           thisQuestionAnswers = thisQuestionAnswers.filter(
             (s) => s.label !== option.label
           );
         } else {
-          // Se não, adiciona-a
           thisQuestionAnswers.push(newSelection);
         }
       }
 
-      // Devolve as respostas das outras perguntas + as respostas atualizadas desta pergunta
       return [...otherQuestionAnswers, ...thisQuestionAnswers];
     });
   };
-  // --- FIM DA LÓGICA CORRIGIDA ---
 
   const handleValueChange = (
     questionId: number,

@@ -3,6 +3,7 @@ import { DialogType } from "@/types/confession";
 
 export interface SelectedAnswer {
   questionId: number;
+  prompt: string;
   label: string;
   pdfPhrase: string | null;
   isExclusive: boolean;

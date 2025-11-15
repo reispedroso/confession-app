@@ -30,22 +30,22 @@ export function StepForm({
     setSelections(savedAnswers);
   }, [stepData.id, getStepAnswers]);
 
-
   const handleSelect = (
     question: ConfessionQuestion,
     option: ConfessionOption
   ) => {
     setSelections((prev) => {
       const otherQuestionAnswers = prev.filter(
-        (s) => s.questionId !== question.id
+        (s) => s.prompt !== question.prompt
       );
 
       let thisQuestionAnswers = prev.filter(
-        (s) => s.questionId === question.id
+        (s) => s.prompt === question.prompt
       );
 
       const newSelection: SelectedAnswer = {
         questionId: question.id,
+        prompt: question.prompt,
         label: option.label,
         pdfPhrase: option.pdfPhrase,
         isExclusive: option.isExclusive,
@@ -63,8 +63,7 @@ export function StepForm({
         } else {
           thisQuestionAnswers = [newSelection];
         }
-      }
-      else {
+      } else {
         thisQuestionAnswers = thisQuestionAnswers.filter(
           (s) => !s.isExclusive
         );
@@ -81,19 +80,18 @@ export function StepForm({
           thisQuestionAnswers.push(newSelection);
         }
       }
-
       return [...otherQuestionAnswers, ...thisQuestionAnswers];
     });
   };
 
   const handleValueChange = (
-    questionId: number,
+    prompt: string,
     label: string,
     newValue: string
   ) => {
     setSelections((prev) =>
       prev.map((s) => {
-        if (s.questionId === questionId && s.label === label) {
+        if (s.prompt === prompt && s.label === label) {
           let valueToStore: string | number | null = newValue;
           if (s.dialogType === "count") {
             if (newValue === "") {
@@ -110,15 +108,15 @@ export function StepForm({
     );
   };
 
-  const isSelected = (questionId: number, label: string) => {
+  const isSelected = (prompt: string, label: string) => {
     return selections.some(
-      (s) => s.questionId === questionId && s.label === label
+      (s) => s.prompt === prompt && s.label === label
     );
   };
 
-  const getSelectionValue = (questionId: number, label: string) => {
+  const getSelectionValue = (prompt: string, label: string) => {
     const selection = selections.find(
-      (s) => s.questionId === questionId && s.label === label
+      (s) => s.prompt === prompt && s.label === label
     );
     return selection?.value ?? "";
   };
@@ -159,7 +157,7 @@ export function StepForm({
         <div className="space-y-10">
           {stepData.questions.map((question) => (
             <div
-              key={question.id}
+              key={question.prompt}
               className="space-y-5 border-b border-zinc-200 pb-8 last:border-b-0 last:pb-0"
             >
               <div className="flex items-center space-x-3">
@@ -176,23 +174,23 @@ export function StepForm({
                   <div key={option.label}>
                     <div className="flex items-center space-x-3">
                       <Checkbox
-                        id={`q${question.id}-${option.label}`}
-                        checked={isSelected(question.id, option.label)}
+                        id={`q-${question.prompt}-${option.label}`}
+                        checked={isSelected(question.prompt, option.label)}
                         onCheckedChange={() => handleSelect(question, option)}
                       />
                       <label
-                        htmlFor={`q${question.id}-${option.label}`}
+                        htmlFor={`q-${question.prompt}-${option.label}`}
                         className="cursor-pointer text-lg font-medium leading-snug text-zinc-700 transition-colors hover:text-zinc-900"
                       >
                         {option.label}
                       </label>
                     </div>
 
-                    {isSelected(question.id, option.label) &&
+                    {isSelected(question.prompt, option.label) &&
                       option.dialogType && (
                         <div className="ml-8 mt-3 space-y-2 pb-1">
                           <Label
-                            htmlFor={`input-${question.id}-${option.label}`}
+                            htmlFor={`input-${question.prompt}-${option.label}`}
                             className="text-sm font-medium text-red-700"
                           >
                             {option.dialogType === "count"
@@ -200,15 +198,15 @@ export function StepForm({
                               : "Especifique (opcional):"}
                           </Label>
                           <Input
-                            id={`input-${question.id}-${option.label}`}
+                            id={`input-${question.prompt}-${option.label}`}
                             type={
                               option.dialogType === "count" ? "number" : "text"
                             }
                             min={option.dialogType === "count" ? 1 : undefined}
-                            value={getSelectionValue(question.id, option.label)}
+                            value={getSelectionValue(question.prompt, option.label)}
                             onChange={(e) =>
                               handleValueChange(
-                                question.id,
+                                question.prompt,
                                 option.label,
                                 e.target.value
                               )

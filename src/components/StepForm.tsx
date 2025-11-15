@@ -30,20 +30,23 @@ export function StepForm({
     setSelections(savedAnswers);
   }, [stepData.id, getStepAnswers]);
 
-
+  // --- INÍCIO DA LÓGICA CORRIGIDA ---
   const handleSelect = (
     question: ConfessionQuestion,
     option: ConfessionOption
   ) => {
     setSelections((prev) => {
+      // 1. Separa as respostas de OUTRAS perguntas
       const otherQuestionAnswers = prev.filter(
         (s) => s.questionId !== question.id
       );
 
-      const thisQuestionAnswers = prev.filter(
+      // 2. Pega apenas as respostas DESTA pergunta
+      let thisQuestionAnswers = prev.filter(
         (s) => s.questionId === question.id
       );
 
+      // 3. Cria o novo item de seleção
       const newSelection: SelectedAnswer = {
         questionId: question.id,
         label: option.label,
@@ -53,35 +56,48 @@ export function StepForm({
         value: null,
       };
 
+      // CASO 1: O utilizador clicou numa opção EXCLUSIVA
       if (option.isExclusive) {
         const isAlreadySelected = thisQuestionAnswers.some(
           (s) => s.label === option.label
         );
 
-        const newAnswers = isAlreadySelected ? [] : [newSelection];
-        return [...otherQuestionAnswers, ...newAnswers];
+        if (isAlreadySelected) {
+          // Se já estava selecionada, desmarca (fica vazio)
+          thisQuestionAnswers = [];
+        } else {
+          // Se não estava selecionada, desmarca tudo e seleciona esta
+          thisQuestionAnswers = [newSelection];
+        }
       }
-
-      const exclusiveAnswer = thisQuestionAnswers.find((s) => s.isExclusive);
-      if (exclusiveAnswer) {
-        return [...otherQuestionAnswers, newSelection];
-      }
-
-      const isAlreadySelected = thisQuestionAnswers.some(
-        (s) => s.label === option.label
-      );
-
-      if (isAlreadySelected) {
-        const newAnswers = thisQuestionAnswers.filter(
-          (s) => s.label !== option.label
+      // CASO 2: O utilizador clicou numa opção NORMAL (não exclusiva)
+      else {
+        // 1. Remove qualquer opção exclusiva que possa estar marcada
+        thisQuestionAnswers = thisQuestionAnswers.filter(
+          (s) => !s.isExclusive
         );
-        return [...otherQuestionAnswers, ...newAnswers];
+
+        // 2. Verifica se esta opção normal já estava marcada
+        const isAlreadySelected = thisQuestionAnswers.some(
+          (s) => s.label === option.label
+        );
+
+        if (isAlreadySelected) {
+          // Se sim, remove-a (desmarca)
+          thisQuestionAnswers = thisQuestionAnswers.filter(
+            (s) => s.label !== option.label
+          );
+        } else {
+          // Se não, adiciona-a
+          thisQuestionAnswers.push(newSelection);
+        }
       }
 
-      const newAnswers = [...thisQuestionAnswers, newSelection];
-      return [...otherQuestionAnswers, ...newAnswers];
+      // Devolve as respostas das outras perguntas + as respostas atualizadas desta pergunta
+      return [...otherQuestionAnswers, ...thisQuestionAnswers];
     });
   };
+  // --- FIM DA LÓGICA CORRIGIDA ---
 
   const handleValueChange = (
     questionId: number,
@@ -139,10 +155,8 @@ export function StepForm({
     }
   };
 
-
   return (
     <div className="w-full max-w-2xl bg-white rounded-2xl shadow-lg overflow-hidden">
-      
       <div className="bg-red-800 text-white p-4 text-center">
         <h1 className="text-lg opacity-80 font-bold tracking-tight">
           {stepData.title}
@@ -155,16 +169,12 @@ export function StepForm({
       </div>
 
       <div className="p-6 md:p-8 space-y-10">
-        
         <div className="space-y-10">
           {stepData.questions.map((question) => (
             <div
               key={question.id}
- 
               className="space-y-5 border-b border-zinc-200 pb-8 last:border-b-0 last:pb-0"
             >
-              
-     
               <div className="flex items-center space-x-3">
                 <div className="bg-red-800 text-white font-semibold size-8 flex items-center justify-center rounded-md shrink-0">
                   {question.id}
@@ -193,10 +203,10 @@ export function StepForm({
 
                     {isSelected(question.id, option.label) &&
                       option.dialogType && (
-                        <div className="ml-8 mt-3 space-y-2 pb-1"> 
+                        <div className="ml-8 mt-3 space-y-2 pb-1">
                           <Label
                             htmlFor={`input-${question.id}-${option.label}`}
-                            className="text-sm font-medium text-red-700" 
+                            className="text-sm font-medium text-red-700"
                           >
                             {option.dialogType === "count"
                               ? "Quantas vezes?"
@@ -216,7 +226,7 @@ export function StepForm({
                                 e.target.value
                               )
                             }
-                            className="h-10 border-zinc-300 bg-white text-zinc-800" 
+                            className="h-10 border-zinc-300 bg-white text-zinc-800"
                             placeholder={
                               option.dialogType === "count" ? "Ex: 3" : "..."
                             }

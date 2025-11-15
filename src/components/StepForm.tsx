@@ -30,6 +30,7 @@ export function StepForm({
     setSelections(savedAnswers);
   }, [stepData.id, getStepAnswers]);
 
+
   const handleSelect = (
     question: ConfessionQuestion,
     option: ConfessionOption
